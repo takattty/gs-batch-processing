@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.DataClassRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
+// JOBが完了した時に通知を受けるクラス
 @Component
 public class JobCompletionNotificationListener implements JobExecutionListener {
 
@@ -17,12 +18,15 @@ public class JobCompletionNotificationListener implements JobExecutionListener {
 
 	private final JdbcTemplate jdbcTemplate;
 
+	// DI
 	public JobCompletionNotificationListener(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
+	// ここもオーバーライド。JobExecutionListener。
 	@Override
 	public void afterJob(JobExecution jobExecution) {
+		// ここでBatchStatusの内容見れるの凄いな。
 		if(jobExecution.getStatus() == BatchStatus.COMPLETED) {
 			log.info("!!! JOB FINISHED! Time to verify the results");
 
